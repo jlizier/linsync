@@ -81,10 +81,9 @@ parameters.d = 4;
 %   Must be a scalar; put arrays for iterating over multiple values
 %   into SRangeToPlot if using runComputeSyncResults etc
 parameters.S = 0;
-%   Can put the full range of S values being investigated into the
-%   following for later plotting:
-parameters.SRangeToPlot = [100, 1000, 10000, 100000, 1000000];
-
+%   runComputeSyncResults (on cluster) or plotErrorInEmpiricalSyncResults
+%   use the full range in the following:
+parameters.SRangeToPlot = 0;
 
 % - maxMotifLength - for continuous process, this is the max motif length (m)
 %    to make the sync approximations up to; for discrete process, this is the maximum walk
