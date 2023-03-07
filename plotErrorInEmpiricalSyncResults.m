@@ -136,7 +136,7 @@ end
 % h
 set(gca, 'XScale','log', 'YScale','log');
 % labels
-legend(h, labels);
+legend(h, labels, 'NumColumns', 2);
 hold off;
 title('Relative error of empirical \langle\sigma^2\rangle estimate versus sample length');
 xlabel('Sample length L');
