@@ -23,7 +23,7 @@ end
 
 addpath(genpath(parameters.syncToolkitPath));
 
-fprintf('Beginning combining sync results for dir %s\n', parameters.folder);
+fprintf('Beginning combining sync results from dir %s into %s\n', parameters.combineResultsFrom, parameters.folder);
 
 % Generate string for the boolean arguments ready for file names
 if (parameters.undirected)
@@ -114,6 +114,9 @@ for S = parameters.SRangeToPlot
                 allDominantEigenvalues = [allDominantEigenvalues, dominantEigenvalues];
                 allSecondEigenvalues = [allSecondEigenvalues, secondEigenvalues];
         end
+    end
+    if (totalRepeats == 0)
+        error('No results found - did you set parameters.combineResultsFrom correctly?');
     end
     % All results have been sorted. So now rename them and save into the
     % new file. Also change the final filename for the correct number of
