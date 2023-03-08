@@ -17,7 +17,7 @@ function computeSyncResults(varargin)
 %     We require the following to be defined in order:
 %     N, b, c, undirected, discretized, repeats, networkType, p, d, S, maxMotifLength, folder
 %     The following are optional:
-%     MaxK, dt
+%     MaxK, dt, randSeed
 %
 %% Linear Sync Toolkit (linsync)
 % Copyright (C) 2023 Joseph T. Lizier
@@ -69,6 +69,9 @@ syncWidthApproxes = zeros(indices, maxMotifLength, repeats);
 syncWidthEmpirical = zeros(indices, repeats);
 dominantEigenvalues = zeros(indices, repeats);
 secondEigenvalues = zeros(indices, repeats);
+
+% Seed the random number generator
+rng(randSeed);
 
 %% Main loop over parameters to run experiments for (p or c array):
 for paramIndex = 1 : indices

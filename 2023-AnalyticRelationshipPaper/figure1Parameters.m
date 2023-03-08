@@ -94,7 +94,7 @@ parameters.maxMotifLength = 50;
 
 % - folder - directory where all of the files are to be stored.
 if isCluster
-    parameters.folder = './results/N100-randRing-d4-b1.00-c0.50-dir-k4-cont/[@P1]';
+    parameters.folder = './results/N100-randRing-d4-b1.00-c0.50-dir-k50-cont/[@P1]';
 else
     parameters.folder = './results/';
 end
@@ -114,3 +114,8 @@ parameters.MaxK = 100000;
 
 % dt - time interval for iterating the exact method (continuous time). Ignored for discrete time.
 parameters.dt = 1; 
+
+% randSeed - seed for Matlab's random number generator. Set to 'shuffle' to
+% see back on current time (important for cluster runs so they are all
+% different) or an integer to save repeatable runs.
+parameters.randSeed = 'shuffle';

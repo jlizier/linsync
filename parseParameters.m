@@ -33,6 +33,7 @@ if (length(varargin) == 1)
     folder = parameters.folder;
     MaxK = parameters.MaxK;
     dt = parameters.dt;
+    randSeed = parameters.randSeed;
 elseif (length(varargin) < 12)
     fprintf('Not enough arguments supplied, see code for details');
 else
@@ -59,5 +60,10 @@ else
         dt = varargin{14};
     else
         dt = 1;
+    end
+    if (length(varargin) > 14)
+        randSeed = varargin{15};
+    else
+        randSeed = 'shuffle';
     end
 end

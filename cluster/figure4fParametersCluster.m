@@ -113,3 +113,8 @@ parameters.MaxK = 100000;
 
 % dt - time interval for iterating the exact method (continuous time). Ignored for discrete time.
 parameters.dt = 1; 
+
+% randSeed - seed for Matlab's random number generator. Set to 'shuffle' to
+% see back on current time (important for cluster runs so they are all
+% different) or an integer to save repeatable runs.
+parameters.randSeed = 'shuffle';
