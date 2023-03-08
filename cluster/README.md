@@ -4,16 +4,15 @@
 
 On your cluster, you will need a few tweaks before the scripts will work for you:
 
-1. Create sub-folders `props`, `processshellscripts`, `log`, `err`
 1. `runProcess.sh` - at lines 51-60 edit the qsub command to be precisely what your cluster needs. This will include editing your memory/resource requirements if they are supplied in the qsub command to your cluster.
 1. `startProcessTemplate.sh` - at lines 18-21 edit the resources you require if your cluster checks resources from the script that will be run. Also edit which Matlab or other modules you need to load in.
-1. Run `chmod u+x *.sh` so that all of your shell scripts here are executable
+1. Check that all of the .sh files are executable (they should already be) - run `chmod u+x *.sh` if not.
 
 # How it works
 
 In brief:
 1. You set up the parameters for your experiments in `parameters.m`.
-1. You call `runManyProcesses.sh 1 1 200` for example to set up 200 parallel experiments -- these run several repeat sample networks each in parallel over the same parameter settings, rather than parallelising over parameters. Each job requires 3-4 hours on my cluster.
+1. You call `runManyProcesses.sh 1 1 200` for example to set up 200 parallel experiments -- these run several repeat sample networks each in parallel over the same parameter settings, rather than parallelising over parameters. Each job requires ~3 hours on my cluster for Figure 1 and <10 minutes for Figure 4 subfigure jobs.
 1. `runManyProcesses.sh` creates a lot of dummy copies of the parameters file (basically only changing the results filename for each) and then calls `runProcess.sh` to submit a cluster job for each. There are probably simpler ways to do this with array jobs on the cluster, but I had this running already ...
 1. Each cluster job is to call `startProcessTemplate.sh`, which in turn runs Matlab with `runComputeSyncResults.m` with the given parameter file.
 1. When the cluster jobs are finished, you have the 200 (or however many you ran) results files in the sub-folder of results.
@@ -73,7 +72,7 @@ saveas(gca, [parameters.folder, 'fig1.fig'], 'fig');
 # Example - recreating Figure 4 from the paper
 
 The parameters file `figure4aParametersCluster.m` is provided for use on the cluster, specifying only 10 repeats per job.
-It is almost the same as that supplied in `../2023-AnalyticRelationshipPaper`.
+It is almost the same as that supplied in `../2023-AnalyticRelationshipPaper` for short single-threaded runs.
 Also see how a parameter argument will be substituted as `[@P1]` in the results file name, this ensures the parallel jobs all write to different results files.
 So we copy that here as `parameters.m` for the cluster scripts to use:
 ```shell
@@ -85,6 +84,8 @@ Next, make sure that the directory shown in parameters.folder exists, aside from
 mkdir results
 mkdir results/N100-randRing-d2-b1.00-c0.50-dir-k4-cont
 ```
+
+The `startProcessTemplate.sh` file currently asks for 4 hours of walltime for the Figure 1 experiments; you could bring this down to 20 minutes for each Figure 4 experiment.
 
 Now we will submit 200 cluster jobs running `runComputeSyncResults.m` via `startProcessTemplate.sh`:
 ```shell
