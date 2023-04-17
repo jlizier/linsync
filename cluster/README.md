@@ -29,12 +29,6 @@ So we copy that here as `parameters.m` for the cluster scripts to use:
 cp ./figure1ParametersCluster.m ./parameters.m
 ```
 
-Next, make sure that the directory shown in parameters.folder exists, aside from the `[@P1]` subfolder (else writing the results will fail). E.g.:
-```shell
-mkdir results
-mkdir results/N100-randRing-d4-b1.00-c0.50-dir-k4-cont
-```
-
 Now we will submit 200 cluster jobs running `runComputeSyncResults.m` via `startProcessTemplate.sh`:
 ```shell
 ./runManyProcesses.sh 1 1 200
@@ -77,12 +71,6 @@ Also see how a parameter argument will be substituted as `[@P1]` in the results 
 So we copy that here as `parameters.m` for the cluster scripts to use:
 ```shell
 cp ./figure4aParametersCluster.m ./parameters.m
-```
-
-Next, make sure that the directory shown in parameters.folder exists, aside from the `[@P1]` subfolder (else writing the results will fail). E.g. for 4a (change for the others):
-```shell
-mkdir results
-mkdir results/N100-randRing-d2-b1.00-c0.50-dir-k4-cont
 ```
 
 The `startProcessTemplate.sh` file currently asks for 4 hours of walltime for the Figure 1 experiments; you could bring this down to 20 minutes for each Figure 4 experiment.
