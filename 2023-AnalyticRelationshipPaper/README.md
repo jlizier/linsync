@@ -31,7 +31,7 @@ Obviously you can remove those restrictions -- running for 2000 repeats and with
 will take about 100 hours (the longest number of time series samples really 
 blows this out)
 so you would be advised to run for more repeats in parallel fashion as per the
-[cluster instructions](tree/master/cluster).
+[cluster instructions](/cluster).
 
 In any case, the shorter runs give a good idea of the main trends already,
 though there are some fluctuations / std error differences compared to the longer runs.
@@ -61,7 +61,7 @@ on my machine.
 
 Obviously you can remove those restrictions -- running for 1000 repeats will take about 20 hours,
 so you would be advised to run for more repeats in parallel fashion as per the
-[cluster instructions](tree/master/cluster).
+[cluster instructions](/cluster).
 
 In any case, running 10 repeats only gives a good idea of the main trends already,
 though there are some fluctuations / std error differences compared to the longer runs.

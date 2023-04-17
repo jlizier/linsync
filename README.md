@@ -127,7 +127,7 @@ fairly fast. To investigate large numbers or repeats or empirical simulations, p
 numbers of samples, you'll likely be better served running the simulations
 on a compute cluster, splitting out repeat runs over multiple compute processes.
 
-See folder [cluster](tree/master/cluster) for suggestions on how to do this.
+See folder [cluster](/cluster) for suggestions on how to do this.
 
 ## Making plots from results files
 
@@ -158,7 +158,7 @@ from the paper below.
 # Recreating the results from our papers
 
 * For Lizier et al., "Analytic relationship of relative synchronizability to
-network structure and motifs", 2023, the folder [2023-AnalyticRelationshipPaper](tree/master/2023-AnalyticRelationshipPaper)
+network structure and motifs", 2023, the folder [2023-AnalyticRelationshipPaper](/2023-AnalyticRelationshipPaper)
 contains scripts / parameters files to recreate these results, as well as a README documenting how to run them.
 
 # Brief descriptions of files in this folder:
