@@ -8,7 +8,7 @@ the expected mean square deviation from synchronization <\sigma^2> as a function
 the mathematical details provided in the following paper:
 
 J.T. Lizier, F. Bauer, F.M. Atay, and J. Jost,
-"Analytic relationship of relative synchronizability to network structure and motifs",
+_"Analytic relationship of relative synchronizability to network structure and motifs"_,
 Under submission,
 2023
 
@@ -25,20 +25,27 @@ the mathematics handles the case where the fully synchronized state vector
 \psi_0=[1,1,...,1] is an eigenvalue of C with \lambda_0 = 1,
 and <\sigma^2> = \lim_{t -> \infty} < 1/N \sum_i (x_i(t) - \bar{x(t)} )^2 >
 
-Please *cite* your use of the toolkit via the above paper.
+Please **cite** your use of the toolkit via the above paper.
 
-# Use cases
+In this readme, we describe:
+1. the [use cases](#1-use-cases) of the code and how to thread them together
+1. how to [recreate](#2-recreating-the-results-from-our-papers) results from our papers
+1. the [contents](#3-brief-descriptions-of-files-in-this-folder) of this top-level folder (the primary analysis scripts).
+
+# 1. Use cases
 
 In this section we briefly outline the primary use cases here are:
-1. Generating sample network sructures _C_ to investigate, and
-1. Computing the deviation from sync \sigma^2 for a given network structure _C_.
-Then building on those we discuss more involved use cases for:
-1. Batch experiments involving parameter sweeps and repeat runs, or
-1. Running experiments on a cluster.
-Finally, with the results generated you can:
-1. Plot the results from these runs.
+1. [Generating sample network structures](#1-1-generating-network-structure) _C_ to investigate, and
+1. [Computing the deviation from sync](#1-2-analysing-the-deviation-from-sync-for-a-given-network-c) \sigma^2 for a given network structure _C_.
 
-## Generating network structure
+Then building on those we discuss more involved use cases for:
+1. [Batch experiments](#1-3-batch-experiments-involving-parameter-sweeps-and-repeat-runs) involving parameter sweeps and repeat runs, or
+1. [Running experiments on a cluster](#1-4-running-on-a-cluster).
+
+Finally, with the results generated you can:
+1. [plot the results](#1-5-making-plots-from-results-files) from these runs.
+
+## 1.1 Generating network structure
 
 In order to compute <\sigma^2> for a network, we need a directed weighted connectivity matrix _C_ for it.
 Several scripts are distributed for the user to generate _C_ matrices for standard structures, including:
@@ -61,7 +68,7 @@ D = diag(sum(A));
 C = (b - c) .* I + c .* A * inv(D);
 ```
 
-## Use cases of analysing the sync for a given network _C_
+## 1.2 Analysing the deviation from sync for a given network _C_
 
 Computing the expected deviation <\sigma^2> from the synchronized state for
 a given network connectivty matrix _C_ is
@@ -85,7 +92,7 @@ As such, there are two steps involved here:
 exp_sigma_sqr = synchronizability(Omega_U);
 ```
 
-## Batch experiments involving parameter sweeps and repeat runs
+## 1.3 Batch experiments involving parameter sweeps and repeat runs
 
 In order to experiment with sweeping over many different parameters,
 with many different sample networks, you can use (or build on) the
@@ -120,7 +127,7 @@ file will create a results file named `N100-randRing-d4-b1.00-c0.50-dir-k50-cont
 We show how to generate such batch results recreating the plots from our paper
 in the next section.
 
-## Running on a cluster
+## 1.4 Running on a cluster
 
 For small number of repeats or no empirical simulations, the scripts run 
 fairly fast. To investigate large numbers or repeats or empirical simulations, particularly for large
@@ -129,7 +136,7 @@ on a compute cluster, splitting out repeat runs over multiple compute processes.
 
 See folder [cluster](/cluster) for suggestions on how to do this.
 
-## Making plots from results files
+## 1.5 Making plots from results files
 
 After having generated results files, you can post-process these results to make plots.
 
@@ -155,13 +162,13 @@ wish to plot for (specified by `parameters.SRangeToPlot`).
 We show how to generate such batch results recreating the Figure 1 and 4 plots
 from the paper below.
 
-# Recreating the results from our papers
+# 2. Recreating the results from our papers
 
 * For Lizier et al., "Analytic relationship of relative synchronizability to
 network structure and motifs", 2023, the folder [2023-AnalyticRelationshipPaper](/2023-AnalyticRelationshipPaper)
 contains scripts / parameters files to recreate these results, as well as a README documenting how to run them.
 
-# Brief descriptions of files in this folder:
+# 3. Brief descriptions of files in this folder:
 
 Primary experimental scripts to run:
 * `computeSyncResults.m` - main script to sample <\sigma^2> for many networks
@@ -207,11 +214,11 @@ L. Barnett, C. L. Buckley and S. Bullock (2009),
 Physical Review E, 79, 051914,
 under a license to "use as you wish".
 
-# News
+# 4. News
 
 _3/3/2023_ - Initial code version uploaded (repo currently private)
 
-# Acknowledgements
+# 5. Acknowledgements
 
 JL was supported through the Australian Research Council DECRA grant DE160100630, and The University of Sydney SOAR award.
 
