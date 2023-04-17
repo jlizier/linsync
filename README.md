@@ -4,7 +4,7 @@ Copyright (C) 2012- [Joseph T. Lizier](http://lizier.me/joseph/)
 
 The `linsync` toolkit provides Matlab tools for analysing **synchronization** in networks of linearly coupled nodes.
 Specifically, it provides implementations of the maths to measure and explore
-the expected mean square deviation from synchronization <\sigma^2> as a function of network coupling matrix C, with
+the expected mean square deviation from synchronization $\left\langle \sigma^2 \right\rangle$ as a function of network coupling matrix $C$, with
 the mathematical details provided in the following paper:
 
 J.T. Lizier, F. Bauer, F.M. Atay, and J. Jost,
@@ -12,18 +12,18 @@ _"Analytic relationship of relative synchronizability to network structure and m
 Under submission,
 2023
 
-The tools compute \sigma^2 in both:
-* Continuous-time Ornstein-Uhlenbeck dynamics: dX(t) = -X(t)*(I-C) + dw(t), where
-  w(t) is a multivariate Wiener process (uncorrelated) with covariance matrix I,
-  and C is the update matrix, and
-* Discrete-time auto-regressive processes: X(t+1) = X(t)*C + R(t), where
-  where R(t) is uncorrelated mean-zero unit-variance Gaussian noise
- and C is the update matrix.
+The tools compute $\left\langle \sigma^2 \right\rangle$ in both:
+* Continuous-time Ornstein-Uhlenbeck dynamics: $$dX(t) = -X(t)*(I-C) + dw(t),$$ where
+  $w(t)$ is a multivariate Wiener process (uncorrelated) with covariance matrix $I$,
+  and $C$ is the update matrix, and
+* Discrete-time auto-regressive processes: $$X(t+1) = X(t)*C + R(t),$$ where
+  where $R(t)$ is uncorrelated mean-zero unit-variance Gaussian noise
+  and $C$ is the update matrix.
 
-In both cases the NxN weighted connectivity matrix C above is specified in row-vector form,
+In both cases the $N \times N$ weighted connectivity matrix $C$ above is specified in row-vector form,
 the mathematics handles the case where the fully synchronized state vector
-\psi_0=[1,1,...,1] is an eigenvalue of C with \lambda_0 = 1,
-and <\sigma^2> = \lim_{t -> \infty} < 1/N \sum_i (x_i(t) - \bar{x(t)} )^2 >
+$\psi_0=[1,1,...,1]$ is an eigenvector of $C$ with eigenvalue $\lambda_0 = 1$,
+and $$\left\langle \sigma^2 \right\rangle = \lim_{t -> \infty} \left\langle 1/N \sum_i (x_i(t) - \bar{x(t)} )^2 \right\rangle $$
 
 Please **cite** your use of the toolkit via the above paper.
 
@@ -34,28 +34,33 @@ In this readme, we describe:
 
 # 1. Use cases
 
-In this section we briefly outline the primary use cases here are:
-1. [Generating sample network structures](#1-1-generating-network-structure) _C_ to investigate, and
-1. [Computing the deviation from sync](#1-2-analysing-the-deviation-from-sync-for-a-given-network-c) \sigma^2 for a given network structure _C_.
+In this section we briefly outline the primary use cases here, being:
+
+1. [Generating sample network structures](#11-generating-network-structure) $C$ to investigate, and
+
+2. [Computing the deviation from sync](#12-analysing-the-deviation-from-sync-for-a-given-network-c) $\sigma^2$ for a given network structure $C$.
 
 Then building on those we discuss more involved use cases for:
-1. [Batch experiments](#1-3-batch-experiments-involving-parameter-sweeps-and-repeat-runs) involving parameter sweeps and repeat runs, or
-1. [Running experiments on a cluster](#1-4-running-on-a-cluster).
+
+3. [Batch experiments](#13-batch-experiments-involving-parameter-sweeps-and-repeat-runs) involving parameter sweeps and repeat runs, or
+
+4. [Running experiments on a cluster](#14-running-on-a-cluster).
 
 Finally, with the results generated you can:
-1. [plot the results](#1-5-making-plots-from-results-files) from these runs.
+
+5. [plot the results](#15-making-plots-from-results-files) from these runs.
 
 ## 1.1 Generating network structure
 
-In order to compute <\sigma^2> for a network, we need a directed weighted connectivity matrix _C_ for it.
-Several scripts are distributed for the user to generate _C_ matrices for standard structures, including:
+In order to compute $\left\langle \sigma^2 \right\rangle$ for a network, we need a directed weighted connectivity matrix $C$ for it.
+Several scripts are distributed for the user to generate $C$ matrices for standard structures, including:
 * Erdos-Renyi random graphs -- `generateNewRandomMatrix.m`
 * Fixed in-degree random graphs -- `generateNewRandomMatrixFixedD.m`
 * Watts-Strogatz ring networks with fixed in-degree -- `generateNewRandomRingMatrix.m`
 
 These scripts generate unweighted adjacency matrices, then the user should weight the edges.
-A sample generating a weighted, directed Watts-Strogatz ring network of _N_ nodes, with in-degree _d_,
-and rewiring probability _p_, without self-connections allowed from re-wiring, and ensuring 
+A sample generating a weighted, directed Watts-Strogatz ring network of $N$ nodes, with in-degree $d$,
+and rewiring probability $p$, without self-connections allowed from re-wiring, and ensuring 
 the network remains connected:
 
 ```matlab
@@ -70,18 +75,18 @@ C = (b - c) .* I + c .* A * inv(D);
 
 ## 1.2 Analysing the deviation from sync for a given network _C_
 
-Computing the expected deviation <\sigma^2> from the synchronized state for
-a given network connectivty matrix _C_ is
+Computing the expected deviation $\left\langle \sigma^2 \right\rangle$ from the synchronized state for
+a given network connectivty matrix $C$ is
 carried out via the simplified formula
-<\sigma^2> = 1/N trace(\Omega_U)
-derived in our paper, where \Omega_U is the covariance matrix between the nodes
-in the space orthogonal to the fully synchronized state vector \psi_0.
-This is also equal to U^T \Omega U, the projection of the covariance matrix
-\Omega via the unaveraging operator U, where U = I - G, G_ij = 1/N.
+$$\left\langle \sigma^2 \right\rangle = 1/N \mathrm{trace}(\Omega_U)$$
+derived in our paper, where $\Omega_U$ is the covariance matrix between the nodes
+in the space orthogonal to the fully synchronized state vector $\psi_0$.
+This is also equal to $U^T \Omega U$, the projection of the covariance matrix
+$\Omega$ via the unaveraging operator $U$, where $U = I - G$, $G_ij = 1/N$.
 
 As such, there are two steps involved here:
 1. Calculating the projected covariance matrix, and
-1. Computing <\sigma^2> from that.
+1. Computing $\left\langle \sigma^2 \right\rangle$ from that.
 
 ```matlab
 % First compute the projected covariance matrix. discreteTime is a boolean
@@ -104,9 +109,9 @@ This will tell the compute script, for example, what size of network,
 what type of network, the weights to use on coupled nodes, how many
 repeat runs or samples for each parameter set to use, etc.
 The sample parameters template is currently set up to recreate the results
-for Fig 4b of the paper (i.e. N=100, d=4, c=0.5, p=[0.001, 0.002, 0.005, 0.01,
-0.02, 0.05, 0.1, 0.2, 0.5, 1], directed network, continuous time,
-no empirical runs (S=0), motif approximations up to 50.), except for only 2 repeat
+for Fig 4b of the paper (i.e. `N=100`, `d=4`, `c=0.5`, `p=[0.001, 0.002, 0.005, 0.01,
+0.02, 0.05, 0.1, 0.2, 0.5, 1]`, directed network, continuous time,
+no empirical runs (`S=0`), motif approximations up to 50.), except for only 2 repeat
 runs per set (to make your first run go fast!).
 
 Then call `computeSyncResults.m`, passing in the parameters file you have set up
@@ -124,8 +129,8 @@ folder specified by `parameters.folder`, formatted with a filename composed
 from the parameters themselves. Running the above from our parametersTemplate.m
 file will create a results file named `N100-randRing-d4-b1.00-c0.50-dir-k50-cont-S0-repeats2.mat`.
 
-We show how to generate such batch results recreating the plots from our paper
-in the next section.
+We show how to generate such batch results recreating the plots from our 2023 paper
+in [2023-AnalyticRelationshipPaper](/2023-AnalyticRelationshipPaper).
 
 ## 1.4 Running on a cluster
 
@@ -140,7 +145,7 @@ See folder [cluster](/cluster) for suggestions on how to do this.
 
 After having generated results files, you can post-process these results to make plots.
 
-To plot <\sigma^2> versus the swept parameter (p or c), you can call
+To plot $\left\langle \sigma^2 \right\rangle$ versus the swept parameter ($p$ or $c$), you can call
 `plotSyncResults.m`, passing in the same parameters object / filename:
 
 ```matlab
@@ -148,19 +153,19 @@ plotSyncResults('parametersTemplate.m'); % using our template file
 ```
 
 Alternatively, plot the error between emprical and analytic calculations
-for <\sigma^2> by calling `plotErrorInEmpiricalSyncResults.m`:
+for $\left\langle \sigma^2 \right\rangle$ by calling `plotErrorInEmpiricalSyncResults.m`:
 
 ```matlab
-`plotErrorInEmpiricalSyncResults('parametersTemplate.m'); % using our template file
+plotErrorInEmpiricalSyncResults('parametersTemplate.m'); % using our template file
 ```
 
-This specifically requires having set the parameter S (number of empirical
-samples) to be > 0 in order to have run empirical simulations, and having
+This specifically requires having set the parameter `S` (number of empirical
+samples) to be $> 0$ in order to have run empirical simulations, and having
 run `computeSyncResults` one time for each of the values of `S` that you
 wish to plot for (specified by `parameters.SRangeToPlot`).
 
-We show how to generate such batch results recreating the Figure 1 and 4 plots
-from the paper below.
+We show how to generate such batch results on a cluster recreating the Figure 1 and 4 plots
+from the 2023 paper in [cluster](/cluster).
 
 # 2. Recreating the results from our papers
 
@@ -171,24 +176,24 @@ contains scripts / parameters files to recreate these results, as well as a READ
 # 3. Brief descriptions of files in this folder:
 
 Primary experimental scripts to run:
-* `computeSyncResults.m` - main script to sample <\sigma^2> for many networks
+* `computeSyncResults.m` - main script to sample $\left\langle \sigma^2 \right\rangle$ for many networks
    with given parameters; saves results to .mat files for later processing.
 
 Plotting scripts once results are ready:
-* `plotSyncResults.m` - plot <\sigma^2> versus p or c (like Figure 4).
+* `plotSyncResults.m` - plot $\left\langle \sigma^2 \right\rangle$ versus $p$ or $c$ (like Figure 4).
 * `plotErrorInEmpiricalSyncResults.m` - plot difference between analytic
-   and empirical results for <\sigma^2> (like Figure 1).
+   and empirical results for $\left\langle \sigma^2 \right\rangle$ (like Figure 1).
 
-User-level scripts for analytical computation of projected covariance matrices and <\sigma^2>: 
-* `covarianceUGaussianNet.m` - computes the projected covariance matrix (U^T \Omega U) and eigenvalues of a given connectivity matrix C.
-* `synchronizability.m` - computes <\sigma^2> from the output (U^T \Omega U)  of `covarianceUGaussianNet.m`.
+User-level scripts for analytical computation of projected covariance matrices and $\left\langle \sigma^2 \right\rangle$: 
+* `covarianceUGaussianNet.m` - computes the projected covariance matrix ($U^T \Omega U$) and eigenvalues of a given connectivity matrix $C$.
+* `synchronizability.m` - computes $\left\langle \sigma^2 \right\rangle$ from the output ($U^T \Omega U$)  of `covarianceUGaussianNet.m`.
 
-Underlying scripts involved in _analytical_ computation of projected covariance matrices and <\sigma^2>:
+Underlying scripts involved in _analytical_ computation of projected covariance matrices and $\left\langle \sigma^2 \right\rangle$:
 * `contCon2CovProjected.m` * - computes the projected covariance matrix for the continuous-time case
 * `discreteCon2CovProjected.m` * - computes the projected covariance matrix for the discrete-time case
 
-Underlying scripts to run _numerical_ simulations of dynamics for empirical calculation of <\sigma^2>:
-* `empiricalCovariancesProjected.m` - runs numerical simulations to return an empirical measurement of the projected covariance matrix, for a given number of time samples S.
+Underlying scripts to run _numerical_ simulations of dynamics for empirical calculation of $\left\langle \sigma^2 \right\rangle$:
+* `empiricalCovariancesProjected.m` - runs numerical simulations to return an empirical measurement of the projected covariance matrix, for a given number of time samples `S`.
 * `contCon2LaggedCovProjected.m` * - computes covariance between nodes, starting from zero covariance at time 0; used in the simulations of continuous time dynamics.
 
 Scripts to generate new adjacency matrices:
