@@ -1,4 +1,4 @@
-function combineComputeSyncResults(parameters)
+function combineSyncResults(parameters)
 %
 % Combine the sync results for randomly generated networks as specified in the 
 % parameters object (or file)
@@ -116,7 +116,7 @@ for S = parameters.SRangeToPlot
         end
     end
     if (totalRepeats == 0)
-        error('No results found - did you set parameters.combineResultsFrom correctly?');
+        error('No results found - did you set parameters.combineResultsFrom correctly? Filename suffix sought is %s', fileNameSuffix);
     end
     % All results have been sorted. So now rename them and save into the
     % new file. Also change the final filename for the correct number of
