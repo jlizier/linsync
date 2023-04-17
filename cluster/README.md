@@ -21,8 +21,8 @@ In brief:
 
 # Example - recreating Figure 1 from the paper
 
-The parameters file `figure1ParametersCluster.m` is provided for use on the cluster, specifying only 10 repeats per job.
-It is almost the same as that supplied in `../2023-AnalyticRelationshipPaper`.
+The parameters file `figure1ParametersCluster.m` is provided for use on the cluster, specifying only 10 repeats per job (we will run 200 jobs, creating 2000 repeats in total).
+It is almost the same as that supplied in `../2023-AnalyticRelationshipPaper` for single-threaded runs.
 Also see how a parameter argument will be substituted as `[@P1]` in the results file name, this ensures the parallel jobs all write to different results files.
 So we copy that here as `parameters.m` for the cluster scripts to use:
 ```shell
@@ -38,7 +38,7 @@ Then we wait -- each job should take 2-3 hours, but may take longer to reach the
 
 Once all the jobs are finished, you should have mat files for each value of `S` in folders `1` through `200`
 under your results folder.
-Now we combine these results into single `.mat` files for each `S`.
+Now we combine these results into single `.mat` files for each `S` (with 2000 repeats contained for each).
 You can do this on the cluster itself if you are allowed user-level Matlab jobs there, or else copy all of the 
 results folders back to your own machine.
 In either case, now make sure that you set `parameters.combineResultsFrom` to where all of the results folders are.
@@ -65,7 +65,7 @@ saveas(gca, [parameters.folder, 'fig1.fig'], 'fig');
 
 # Example - recreating Figure 4 from the paper
 
-The parameters file `figure4aParametersCluster.m` is provided for use on the cluster, specifying only 10 repeats per job.
+The parameters file `figure4aParametersCluster.m` is provided for use on the cluster, specifying only 10 repeats per job (we will run 200 jobs, creating 2000 repeats in total).
 It is almost the same as that supplied in `../2023-AnalyticRelationshipPaper` for short single-threaded runs.
 Also see how a parameter argument will be substituted as `[@P1]` in the results file name, this ensures the parallel jobs all write to different results files.
 So we copy that here as `parameters.m` for the cluster scripts to use:
@@ -84,7 +84,7 @@ Then we wait -- each job should take up to a few minutes, but may take longer to
 
 Once all the jobs are finished, you should have mat files in folders `1` through `200`
 under your results folder.
-Now we combine these results into a single `.mat` file.
+Now we combine these results into a single `.mat` file (with 2000 repeats contained for each).
 You can do this on the cluster itself if you are allowed user-level Matlab jobs there, or else copy all of the 
 results folders back to your own machine.
 In either case, now make sure that you set `parameters.combineResultsFrom` to where all of the results folders are.

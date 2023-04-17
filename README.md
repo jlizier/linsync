@@ -13,17 +13,17 @@ Under submission,
 2023
 
 The tools compute $\left\langle \sigma^2 \right\rangle$ in both:
-* Continuous-time Ornstein-Uhlenbeck dynamics: $$dX(t) = -X(t)*(I-C) + dw(t),$$ where
+* Continuous-time Ornstein-Uhlenbeck dynamics: $$dX(t) = -X(t)(I-C) + dw(t),$$ where
   $w(t)$ is a multivariate Wiener process (uncorrelated) with covariance matrix $I$,
   and $C$ is the update matrix, and
-* Discrete-time auto-regressive processes: $$X(t+1) = X(t)*C + R(t),$$ where
+* Discrete-time auto-regressive processes: $$X(t+1) = X(t)C + R(t),$$ where
   where $R(t)$ is uncorrelated mean-zero unit-variance Gaussian noise
   and $C$ is the update matrix.
 
 In both cases the $N \times N$ weighted connectivity matrix $C$ above is specified in row-vector form,
 the mathematics handles the case where the fully synchronized state vector
 $\psi_0=[1,1,...,1]$ is an eigenvector of $C$ with eigenvalue $\lambda_0 = 1$,
-and $$\left\langle \sigma^2 \right\rangle = \lim_{t -> \infty} \left\langle 1/N \sum_i (x_i(t) - \bar{x(t)} )^2 \right\rangle $$
+and $$\left\langle \sigma^2 \right\rangle = \lim_{t \rightarrow \infty} \left\langle 1/N \sum_i (x_i(t) - \bar{x}(t) )^2 \right\rangle $$
 
 Please **cite** your use of the toolkit via the above paper.
 
@@ -38,7 +38,7 @@ In this section we briefly outline the primary use cases here, being:
 
 1. [Generating sample network structures](#11-generating-network-structure) $C$ to investigate, and
 
-2. [Computing the deviation from sync](#12-analysing-the-deviation-from-sync-for-a-given-network-c) $\sigma^2$ for a given network structure $C$.
+2. [Computing the deviation from sync](#12-analysing-the-deviation-from-sync-for-a-given-network-c) $\left\langle \sigma^2 \right\rangle$ for a given network structure $C$.
 
 Then building on those we discuss more involved use cases for:
 
@@ -78,14 +78,14 @@ C = (b - c) .* I + c .* A * inv(D);
 Computing the expected deviation $\left\langle \sigma^2 \right\rangle$ from the synchronized state for
 a given network connectivty matrix $C$ is
 carried out via the simplified formula
-$$\left\langle \sigma^2 \right\rangle = 1/N \mathrm{trace}(\Omega_U)$$
+$$\left\langle \sigma^2 \right\rangle = \frac{1}{N} \mathrm{trace}(\Omega_U)$$
 derived in our paper, where $\Omega_U$ is the covariance matrix between the nodes
 in the space orthogonal to the fully synchronized state vector $\psi_0$.
 This is also equal to $U^T \Omega U$, the projection of the covariance matrix
-$\Omega$ via the unaveraging operator $U$, where $U = I - G$, $G_ij = 1/N$.
+$\Omega$ via the unaveraging operator $U$, where $U = I - G$, $G_{ij} = 1/N$.
 
 As such, there are two steps involved here:
-1. Calculating the projected covariance matrix, and
+1. Calculating the projected covariance matrix $\Omega_U$, and
 1. Computing $\left\langle \sigma^2 \right\rangle$ from that.
 
 ```matlab
@@ -185,8 +185,8 @@ Plotting scripts once results are ready:
    and empirical results for $\left\langle \sigma^2 \right\rangle$ (like Figure 1).
 
 User-level scripts for analytical computation of projected covariance matrices and $\left\langle \sigma^2 \right\rangle$: 
-* `covarianceUGaussianNet.m` - computes the projected covariance matrix ($U^T \Omega U$) and eigenvalues of a given connectivity matrix $C$.
-* `synchronizability.m` - computes $\left\langle \sigma^2 \right\rangle$ from the output ($U^T \Omega U$)  of `covarianceUGaussianNet.m`.
+* `covarianceUGaussianNet.m` - computes the projected covariance matrix ($\Omega_U$) and eigenvalues of a given connectivity matrix $C$.
+* `synchronizability.m` - computes $\left\langle \sigma^2 \right\rangle$ from the output ($\Omega_U$)  of `covarianceUGaussianNet.m`.
 
 Underlying scripts involved in _analytical_ computation of projected covariance matrices and $\left\langle \sigma^2 \right\rangle$:
 * `contCon2CovProjected.m` * - computes the projected covariance matrix for the continuous-time case
@@ -215,7 +215,7 @@ Files marked * are adapted from the ncomp toolkit of Barnett et al.,
 originally distributed at http://www.secse.net/ncomp/ncomp_tools.zip
 (though no longer available at that address), with the paper
 L. Barnett, C. L. Buckley and S. Bullock (2009),
-"On Neural Complexity and Structural Connectivity",
+_"On Neural Complexity and Structural Connectivity"_,
 Physical Review E, 79, 051914,
 under a license to "use as you wish".
 
