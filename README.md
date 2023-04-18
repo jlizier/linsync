@@ -65,7 +65,7 @@ the network remains connected:
 
 ```matlab
 % First generate the unweighted adjacency matrix without self-edges:
-A = generateNewRandomRingMatrix(N, d, p, false, undirected, false, true);
+A = generateNewRandomRingMatrix(N, d, p, false, true, false, true);
 % Then compute the in-degrees (should be all d in this example):
 D = diag(sum(A));
 % and weight the edges as c/d each and insert self-edges with weight b - c:
@@ -89,10 +89,10 @@ As such, there are two steps involved here:
 1. Computing $\left\langle \sigma^2 \right\rangle$ from that.
 
 ```matlab
-% First compute the projected covariance matrix. discreteTime is a boolean
-%  for whether we consider discrete-time (true) or continuous-time process,
-%  MaxK is the number of iterations of the power series to compute \Omega_U
-[sortedLambdasCU, Omega_U, err] = covarianceUGaussianNet(C, discreteTime, MaxK);
+% First compute the projected covariance matrix. The two latter arguments are:
+%  discreteTime is a boolean for whether we consider discrete-time (true) or continuous-time process (false).
+%  MaxK is the number of iterations of the power series to compute \Omega_U.
+[sortedLambdasCU, Omega_U, err] = covarianceUGaussianNet(C, false, 100000);
 % Then compute sigma^2:
 exp_sigma_sqr = synchronizability(Omega_U);
 ```
