@@ -26,7 +26,7 @@ if (exist(parameters.folder, 'dir') == 0)
 end
 
 % To speed up the experiment when not on a cluster you can set:
-parameters.repeats = 10; % instead of 1000
+parameters.repeats = 10; % instead of 2000
 parameters.S = [100, 1000, 10000, 100000]; % Removing the longest runs
 parameters.SRangeToPlot = parameters.S;
 % You can get a decent idea of the main trends for this number already,
@@ -49,5 +49,5 @@ figure(2); % Select the correct plot we're keeping
 print('-depsc', [parameters.folder, 'fig1.eps'])
 saveas(gca, [parameters.folder, 'fig1.fig'], 'fig');
 
-fprintf('Figure 1 finished, using %d network samples (is this the same as the 1000 used for the paper?)\n', ...
+fprintf('Figure 1 finished, using %d network samples (is this the same as the 2000 used for the paper?)\n', ...
     parameters.repeats);
