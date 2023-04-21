@@ -12,7 +12,7 @@ function A = generateNewRandomRingMatrix(N, d, gamma, includeSelf, undirected, a
 %   For undirected graphs, we don't allow connection to an odd number of
 %   other nodes (too unconstrained to work out who to connect to)
 % - allowSelf - whether to allow rewired connected to be made to oneself.
-% - ensureConnected - only return a connected matrix.
+% - ensureConnected - only return an at least weakly-connected matrix.
 %     If this is set to true, then p must be >= 2/N(N-1) for undirected, 1/N(N-1) for directed, for the matrix to be connected.
 %     Note: if allowSelf==true, then (N-1) -> N here.
 %
@@ -133,7 +133,7 @@ while (true)
     %printf('Rewired %d out of %d edges considered\n', rewirings, edgesConsidered);
 
     if (ensureConnected)
-        % Now check that the matrix is connected
+        % Now check that the matrix is at least weakly connected
         symmA = A | A';
         visited = zeros(1,N);
         visited = runDfs(symmA,N,1,visited);

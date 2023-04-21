@@ -61,7 +61,7 @@ Several scripts are distributed for the user to generate $C$ matrices for standa
 These scripts generate unweighted adjacency matrices, then the user should weight the edges.
 A sample generating a weighted, directed Watts-Strogatz ring network of $N$ nodes, with in-degree $d$,
 and rewiring probability $p$, without self-connections allowed from re-wiring, and ensuring 
-the network remains connected:
+the network remains at least weakly-connected:
 
 ```matlab
 % First generate the unweighted adjacency matrix without self-edges:
@@ -96,6 +96,8 @@ As such, there are two steps involved here:
 % Then compute sigma^2:
 exp_sigma_sqr = synchronizability(Omega_U);
 ```
+The call to `covarianceUGaussianNet` will throw an error if the matrix does not meet synchronisation conditions,
+or will not ensure guaranteed convergence of $\Omega_U$.
 
 ## 1.3 Batch experiments involving parameter sweeps and repeat runs
 

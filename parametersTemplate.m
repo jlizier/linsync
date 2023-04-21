@@ -32,7 +32,7 @@ parameters.N = 100;
 %   So (b - c) is the strength of coupling to previous state of the destination.
 %   For stability we require |b| < 1 when undirected, though b == 1 ensures
 %   zero-mode as an eigenvector (for our first sync paper we only use b =
-%   1).
+%   1). Using this then does not guarantee stability in this case.
 parameters.b = 1.0;
 % - c - as above; c is the total strength of non-self coupling of the sources to the destinations.
 %   For stability we require |b - 2c| < 1 when undirected (though I don't
