@@ -1,4 +1,4 @@
-function [sortedLambdasCU, UcovarianceU, err] = covarianceUGaussianNet(C, discreteTime, maximumIterations, forcePowerSeriesForSymmetric, verbose)
+function [sortedLambdasCU, UcovarianceU, err] = covarianceUGaussianNet(C, discreteTime, maximumIterations, forcePowerSeriesForSymmetric, verbose, skipPowerSeriesConvergenceCheck)
 %
 % Computes the eigenvalues of C, and the projected covariance matrix (U^T \Omega U) for the given network.
 %
@@ -10,6 +10,11 @@ function [sortedLambdasCU, UcovarianceU, err] = covarianceUGaussianNet(C, discre
 % - forcePowerSeriesForSymmetric - force the use of power series for UcovarianceU even if the
 %     connectivity matrix is symmetric
 % - verbose - level of verbosity for discreteCon2CovProjected and contCon2CovProjected
+%     (set to -1 if only using a small number of iterations, to avoid
+%     warnings)
+% - skipPowerSeriesConvergenceCheck - to skip checking that max eigenvalue
+%     lies within unit circle (only has an impact for continuous time
+%     dynamics). Default is false.
 % 
 % Outputs
 % - sortedLambdasCU - sorted eigenvalues of CU (from smallest to largest magnitude if complex)
@@ -40,6 +45,10 @@ if (nargin < 5)
     verbose = 0;
 end
 
+if (nargin < 6)
+    skipPowerSeriesConvergenceCheck = false;
+end
+
 % Compute eigenvalues of C * U:
 %  (since C is square, the eigenvalues are the same as C^T - i.e. it doesn't matter that they correspond to row/column vectors)
 lambdasCU = eig(C * U);
@@ -65,7 +74,7 @@ else
 end
 
 % Check for convergence of the projected covariance matrix: (same condition for both continuous and discrete):
-if  (abs(lambdaCUMax) >= 1)
+if  (~skipPowerSeriesConvergenceCheck && (abs(lambdaCUMax) >= 1))
     save('nonconvergentNetwork.mat', 'C'); % save for later investigation
     error('|\\lambda_CU_max| >= 1 (%.2f) implies that the U^T \\Omega U matrix will not converge.\n', abs(lambdaCUMax));
 end
