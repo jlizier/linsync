@@ -69,6 +69,7 @@ syncWidthApproxes = zeros(indices, maxMotifLength, repeats);
 syncWidthEmpirical = zeros(indices, repeats);
 dominantEigenvalues = zeros(indices, repeats);
 secondEigenvalues = zeros(indices, repeats);
+diagonalizable = zeros(indices, repeats);
 
 % Seed the random number generator
 rng(randSeed);
@@ -128,6 +129,7 @@ for paramIndex = 1 : indices
         %  -- for continuous, the actual motif size m (composed of walk
         %       length u and m-u)
         for k = 1 : maxMotifLength
+            % verbose = -1 to suppress warnings on lack of convergence, since we're only asking for a low order approximation
             [~, UcovarianceUApprox, ~] = covarianceUGaussianNet(C, discretized, k, true, -1);
             syncWidthApproxes(paramIndex, k, r) = synchronizability(UcovarianceUApprox);
         end
@@ -161,16 +163,21 @@ for paramIndex = 1 : indices
         secondEigenvalue = sortedEigsByCriteria(length(sortedEigsByCriteria) - 1);
         secondEigenvalues(paramIndex, r) = secondEigenvalue;
         
-        fprintf('Repeat %d for parameter(%d)=%.4f: sync_width=%.1f, empirical=%.1f, approx(1)=%.1f, approx(2)=%.1f, approx(3)=%.1f, lambda_1=%.4f, lambda_2=%.4f\n\n', ...
+        % And finally check whether the weighted adjacency matrix was
+        % diagonlizable:
+        diagonalizable(paramIndex, r) = isdiagonalizable(C);
+
+        fprintf('Repeat %d for parameter(%d)=%.4f: sync_width=%.1f, empirical=%.1f, approx(1)=%.1f, approx(2)=%.1f, approx(3)=%.1f, lambda_1=%.4f, lambda_2=%.4f, isdiag=%d\n\n', ...
             r, paramIndex, paramsToRunThrough(paramIndex), syncWidth, empiricalSyncWidth, syncWidthApproxes(paramIndex, 1, r), syncWidthApproxes(paramIndex, 2, r), ...
-            syncWidthApproxes(paramIndex, 3, r), dominantEigenvalue, secondEigenvalue);
+            syncWidthApproxes(paramIndex, 3, r), dominantEigenvalue, secondEigenvalue, diagonalizable(paramIndex, r));
     end
     
-    fprintf('====\n**All repeats for parameter %.4f completed: <sync_width>=%.3f, <empirical>=%.3f, <approx(1)>=%.3f, <approx(2)>=%.3f, <approx(3)>=%.3f, <lambda_1>=%.4f, <lambda_2>=%.4f\n\n', ...
+    fprintf('====\n**All repeats for parameter %.4f completed: <sync_width>=%.3f, <empirical>=%.3f, <approx(1)>=%.3f, <approx(2)>=%.3f, <approx(3)>=%.3f, <lambda_1>=%.4f, <lambda_2>=%.4f, <isdiag>=%.3f\n\n', ...
         paramsToRunThrough(paramIndex), mean(syncWidths(paramIndex,:)), ...
         mean(syncWidthEmpirical(paramIndex,:)), mean(syncWidthApproxes(paramIndex, 1, :)), ...
         mean(syncWidthApproxes(paramIndex, 2, :)), mean(syncWidthApproxes(paramIndex, 3, :)), ...
-        mean(dominantEigenvalues(paramIndex,:)), mean(secondEigenvalues(paramIndex,:)));
+        mean(dominantEigenvalues(paramIndex,:)), mean(secondEigenvalues(paramIndex,:)), ...
+        mean(diagonalizable(paramIndex, :)));
 end                
 
 %% Save the processed results here:
@@ -210,8 +217,7 @@ end
 save([fileNamePrefix, '.mat'], '-mat', 'N', 'd', 'b', 'c', 'p', 'undirected', 'maxMotifLength', 'discretized', ...
     'networkType', 'paramsToRunThrough', 'S', 'repeats', ...
     'syncWidths', 'syncWidthApproxes', 'syncWidthEmpirical', ...
-    'dominantEigenvalues', 'secondEigenvalues');
+    'dominantEigenvalues', 'secondEigenvalues', 'diagonalizable');
 toc
 
 end
-
