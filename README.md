@@ -13,17 +13,25 @@ Under submission,
 2023
 
 The tools compute $\left\langle \sigma^2 \right\rangle$ in both:
-* Continuous-time Ornstein-Uhlenbeck dynamics: $$dX(t) = -X(t)(I-C) + dw(t),$$ where
-  $w(t)$ is a multivariate Wiener process (uncorrelated) with covariance matrix $I$,
-  and $C$ is the update matrix, and
-* Discrete-time auto-regressive processes: $$X(t+1) = X(t)C + R(t),$$ where
-  where $R(t)$ is uncorrelated mean-zero unit-variance Gaussian noise
-  and $C$ is the update matrix.
+* Continuous-time Ornstein-Uhlenbeck dynamics: $$dX(t) = -X(t)(I-C)\theta dt + \zeta dw(t),$$ where
+  $C$ is the update matrix, $w(t)$ is a multivariate Wiener process (uncorrelated) with covariance matrix $I$,
+  $\theta$ is the reversion rate and $\zeta^2$ is noise strength, and
+* Discrete-time auto-regressive processes: $$X(t+1) = X(t)C + \zeta R(t),$$ where
+  where $C$ is the update matrix, $R(t)$ is uncorrelated mean-zero unit-variance Gaussian noise
+  and $\zeta^2$ is noise strength.
 
 In both cases the $N \times N$ weighted connectivity matrix $C$ above is specified in row-vector form,
 the mathematics handles the case where the fully synchronized state vector
 $\psi_0=[1,1,...,1]$ is an eigenvector of $C$ with eigenvalue $\lambda_0 = 1$,
-and $$\left\langle \sigma^2 \right\rangle = \lim_{t \rightarrow \infty} \left\langle 1/N \sum_i (x_i(t) - \bar{x}(t) )^2 \right\rangle $$
+and $$\left\langle \sigma^2 \right\rangle = \lim_{t \rightarrow \infty} \left\langle 1/N \sum_i (x_i(t) - \bar{x}(t) )^2 \right\rangle $$.
+The above paper gives the solutions in continuous time:
+$$ \left\langle \sigma^2 \right\rangle = \frac{\zeta^2}{2\theta} \sum_{m=0}^{\infty} & \frac{2^{-m}}{N} \sum_{u=0}^{m} \binom{m}{u} \mathrm{trace}\left( U (C^u)^T C^{m-u} U \right) $$,
+and in discrete time:
+$$ \left\langle \sigma^2 \right\rangle & = \frac{\zeta^2}{N} \sum_{u=0}^{\infty}{ \mathrm{trace}\left( U (C^u)^T C^{u} U \right)} $$.
+
+Note that the toolkit fixes $\theta=\zeta=1$ since they act as constant multipliers in the above solutions;
+if you want an answer for arbitray $\theta,\zeta$ then you should multiply the solution the software
+returns for $\left\langle \sigma^2 \right\rangle$ as above.
 
 Please **cite** your use of the toolkit via the above paper.
 
