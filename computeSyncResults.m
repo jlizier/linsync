@@ -80,10 +80,8 @@ for paramIndex = 1 : indices
 
     if (varyingP)
         p = paramsToRunThrough(paramIndex);
-        thisParam = p;
     else
         c = paramsToRunThrough(paramIndex);
-        thisParam = c;
     end
 
     % Now run experiments for each sample network for this parameter
@@ -110,7 +108,8 @@ for paramIndex = 1 : indices
             D = diag(sum(A));
             % Compute connectivity matrix:
             %  (notice how b-c is the self-weight, and c is the total
-            %   weight from d other inputs, which each have c/d)
+            %   weight from d other inputs, which each have c/d.
+            %   Equal weights c/d are not required by the maths, but used for simply experiments here.)
             C = (b - c) .* I + c .* A * inv(D);
 
             % Generate the projected covariance matrix (UcovarianceU == U /Omega U) for it
