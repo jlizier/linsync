@@ -9,7 +9,7 @@ the mathematical details provided in the following paper:
 
 J.T. Lizier, F. Bauer, F.M. Atay, and J. Jost,
 _"Analytic relationship of relative synchronizability to network structure and motifs"_,
-Under submission,
+[arXiv:2305.10509](https://arxiv.org/abs/2305.10509),
 2023
 
 The tools compute $\left\langle \sigma^2 \right\rangle$ in both:

@@ -4,7 +4,7 @@ This folder contains scripts / parameters files to recreate the results of:
 
 J.T. Lizier, F. Bauer, F.M. Atay, and J. Jost,
 _"Analytic relationship of relative synchronizability to network structure and motifs"_,
-Under submission,
+[arXiv:2305.10509](https://arxiv.org/abs/2305.10509),
 2023
 
 ## Figure 1 - convergence of numerical results from simulations
